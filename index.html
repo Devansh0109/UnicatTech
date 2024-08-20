@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly HR Calendar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal" role="dialog" aria-labelledby="login-form-title" aria-modal="true">
+        <div class="modal-content">
+            <form id="login-form">
+                <h2 id="login-form-title">Login</h2>
+                <label for="login-email">Email:</label>
+                <input type="email" id="login-email" placeholder="Enter your email" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Calendar View -->
+    <div class="calendar" id="calendar" style="display: none;">
+        <div class="calendar-header">
+            <button id="prev-week">Prev Week</button>
+            <h2 id="week-date-range"></h2> <!-- Week date range is dynamically populated -->
+            <button id="next-week">Next Week</button>
+
+            <!-- Department Dropdown -->
+            <select id="department-select" aria-label="Select department">
+                <option value="all">All Departments</option>
+                <!-- Department options will be populated here dynamically -->
+            </select>
+
+            <!-- Employee Search Bar -->
+            <input type="text" id="employee-search" placeholder="Search Employees..." aria-label="Search employees">
+        </div>
+        <div class="calendar-body">
+            <div class="calendar-weekdays" id="calendar-weekdays">
+                <div class="weekday-header">Employee</div>
+                <!-- Weekdays will be populated here -->
+            </div>
+            <div class="department-rows" id="department-rows">
+                <!-- Department rows will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Control Buttons Bar (Detached from Calendar) - Initially hidden -->
+    <div class="control-bar" id="control-bar" style="display:none;">
+        <button id="add-department-btn" style="display:none;">Add Department</button>
+        <button id="add-employee-btn" style="display:none;">Add Employee</button>
+        <button id="transfer-admin-btn" style="display:none;">Transfer Admin Rights</button>
+        <button id="add-event-btn">Add Event</button>
+    </div>
+
+    <!-- Add Department Modal -->
+    <div id="department-modal" class="modal" role="dialog" aria-labelledby="add-department-title" aria-modal="true">
+        <div class="modal-content">
+            <button class="close-button" id="close-department-modal" aria-label="Close">&times;</button>
+            <h2 id="add-department-title">Add Department</h2>
+            <form id="department-form">
+                <label for="new-department-name">Department Name:</label>
+                <input type="text" id="new-department-name" name="new-department-name" required>
+                <button type="submit" id="save-department">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Employee Modal -->
+    <div id="employee-modal" class="modal" role="dialog" aria-labelledby="add-employee-title" aria-modal="true">
+        <div class="modal-content">
+            <button class="close-button" id="close-employee-modal" aria-label="Close">&times;</button>
+            <h2 id="add-employee-title">Add Employee</h2>
+            <form id="employee-form">
+                <label for="employee-department">Select Department:</label>
+                <select id="employee-department" name="employee-department" required>
+                    <!-- Department options will be populated here -->
+                </select>
+
+                <label for="new-employee-name">Employee Name:</label>
+                <input type="text" id="new-employee-name" name="new-employee-name" maxlength="15" required>
+
+                <!-- New Email Input -->
+                <label for="employee-email">Employee Email:</label>
+                <input type="email" id="employee-email" name="employee-email" placeholder="Enter employee's email" required>
+
+                <!-- Admin Checkbox -->
+                <label for="is-admin">Set as Admin:</label>
+                <input type="checkbox" id="is-admin" name="is-admin">
+
+                <button type="submit" id="save-employee">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Transfer Admin Rights Modal -->
+    <div id="transfer-admin-modal" class="modal" role="dialog" aria-labelledby="transfer-admin-title" aria-modal="true">
+        <div class="modal-content">
+            <button class="close-button" id="close-transfer-admin-modal" aria-label="Close">&times;</button>
+            <h2 id="transfer-admin-title">Transfer Admin Rights</h2>
+            <form id="transfer-admin-form">
+                <label for="select-admin-employee">Select Employee:</label>
+                <select id="select-admin-employee" name="select-admin-employee" required>
+                    <!-- Employee options will be populated here -->
+                </select>
+                <button type="submit" id="transfer-admin-submit">Transfer Admin Rights</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="event-modal" class="modal" role="dialog" aria-labelledby="add-event-title" aria-modal="true">
+        <div class="modal-content">
+            <button class="close-button" id="close-event-modal" aria-label="Close">&times;</button>
+            <h2 id="modal-title">Add Event</h2>
+            <form id="event-form">
+                <label for="department-name">Department:</label>
+                <select id="department-name" name="department-name" required>
+                    <!-- Department options will be populated here -->
+                </select>
+
+                <label for="employee-name">Employee:</label>
+                <select id="employee-name" name="employee-name" required>
+                    <!-- Employee options will be populated here -->
+                </select>
+
+                <label for="event-title">Event Title:</label>
+                <input type="text" id="event-title" name="event-title" required>
+                
+                <!-- Time Selection for Normal Events -->
+                <div id="time-selection">
+                    <label for="event-date">Date:</label>
+                    <input type="date" id="event-date" name="event-date" required>
+
+                    <label for="start-time">Start Time:</label>
+                    <input type="time" id="start-time" name="start-time" required>
+
+                    <label for="end-time">End Time:</label>
+                    <input type="time" id="end-time" name="end-time" required>
+                </div>
+
+                <!-- Date Range for Leave/Sick -->
+                <div id="date-range-selection" style="display: none;">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" id="start-date" name="start-date">
+
+                    <label for="end-date">End Date:</label>
+                    <input type="date" id="end-date" name="end-date">
+                </div>
+
+                <label for="event-type">Event Type:</label>
+                <select id="event-type" name="event-type" required>
+                    <option value="meeting">Meeting</option>
+                    <option value="sick">Sick</option>
+                    <option value="holiday">Holiday</option>
+                    <option value="out-of-office">Out of Office</option>
+                    <option value="visit-to-customer">Visit to Customer</option>
+                    <option value="customer-visit">Customer Visit</option>
+                    <option value="leave">Leave</option>
+                </select>
+
+                <input type="hidden" id="event-id">
+                
+                <button type="submit" id="save-event">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event List Modal -->
+    <div id="event-list-modal" class="modal" role="dialog" aria-labelledby="event-list-title" aria-modal="true">
+        <div class="modal-content">
+            <button class="close-button" id="close-list-button" aria-label="Close">&times;</button>
+            <h2 id="list-modal-title">Events on <span id="list-date"></span></h2>
+            <ul id="event-list">
+                <!-- Events will be listed here -->
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

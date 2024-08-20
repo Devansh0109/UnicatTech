@@ -1,0 +1,540 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #f7f7f7;
+    overflow-y: auto;
+}
+
+.calendar {
+    width: 100%;
+    max-width: 1200px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: #136893;
+    color: #ffffff;
+    letter-spacing: 1px;
+    flex-wrap: wrap; /* Allow wrapping */
+}
+
+.calendar-header .week-display {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    padding: 5px 10px;
+    background-color: #136893;
+    border-radius: 5px;
+    border: 2px solid #000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-header button {
+    padding: 8px 14px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1.5px solid #000000;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header button:hover {
+    background-color: #e0e0e0;
+    color: #000000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-header button:active {
+    background-color: #136893;
+    color: #ffffff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(2px);
+}
+
+/* New styles for the search input */
+#employee-search {
+    padding: 8px 12px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1.5px solid #000000;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 300px; /* Default width */
+    margin-left: 10px; /* Space between dropdown and search input */
+}
+
+#employee-search::placeholder {
+    color: #888;
+}
+
+#employee-search:hover {
+    background-color: #e0e0e0;
+    color: #000000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#employee-search:active, #employee-search:focus {
+    border-color: #136893;
+    box-shadow: 0 0 5px rgba(19, 104, 147, 0.8);
+    outline: none;
+}
+
+.calendar-body {
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.calendar-weekdays {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid #000000;
+}
+
+.weekday-header, .calendar-weekdays div {
+    width: 14.28%;
+    text-align: center;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    border-right: 1px solid #000000;
+    box-sizing: border-box;
+    padding: 8px 0;
+    font-size: 14px;
+    height: 40px;
+    line-height: 1.2;
+}
+
+.department-rows {
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-row {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid #050505;
+    border-top: 1px solid #050505;
+    align-items: stretch;
+}
+
+.employee-name {
+    width: 150px;
+    font-weight: bold;
+    background-color: #136893;
+    color: #ffffff;
+    border-right: 1px solid #000000;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 10px;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.employee-day {
+    flex-grow: 1;
+    display: flex;
+    border-right: 1px solid #000000;
+    box-sizing: border-box;
+    padding: 5px;
+    position: relative;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.time-column {
+    width: 50px;
+    background-color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    border-right: 1px solid #000000;
+    position: relative;
+}
+
+.time-slot-header {
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid #ddd;
+}
+
+.time-slot {
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid #e0e0e0;
+    box-sizing: border-box;
+}
+
+.day-grid {
+    flex-grow: 1;
+    position: relative;
+    height: 100%;
+    border: 1px solid #ccc;
+    display: grid;
+    grid-template-rows: repeat(11, 30px); /* 11 hours from 8 AM to 6 PM */
+}
+
+.time-slot {
+    border-bottom: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    position: relative;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.2;
+    padding: 3px;
+    background-color: #f9f9f9;
+}
+
+.event-item {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 3px;
+    margin: 3px 0;
+    border-radius: 4px;
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.employee-day:hover {
+    background-color: #e0e0e0;
+}
+
+/* Control Buttons Bar (Detached) */
+.control-bar {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 8px 16px;
+    border-top: 1px solid #000000;
+    width: 100%;
+    background-color: #136893;
+    margin-top: 10px;
+    height: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.control-bar button {
+    padding: 8px 14px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1.5px solid #000000;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.control-bar button:hover {
+    background-color: #e0e0e0;
+    color: #000000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 10px;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #000000;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close-button {
+    color: #000000;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#event-form, #department-form, #employee-form, #transfer-admin-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#event-form label, #department-form label, #employee-form label, #transfer-admin-form label {
+    margin-top: 10px;
+}
+
+#event-form input, #event-form select, 
+#department-form input, 
+#employee-form input, #employee-form select,
+#transfer-admin-form select,
+#save-event, #save-department, #save-employee, #save-transfer-admin {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+
+#save-event, #save-department, #save-employee, #save-transfer-admin {
+    background-color: #136893;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#save-event:hover, #save-department:hover, #save-employee:hover, #save-transfer-admin:hover {
+    background-color: #0b4c6a;
+}
+
+#event-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#event-list li {
+    background-color: #2c84b0aa;
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#event-list li button {
+    background: none;
+    border: none;
+    color: #000000;
+    cursor: pointer;
+}
+
+#event-list li button:hover {
+    color: #e74c3c;
+}
+
+/* Event Colors */
+.meeting {
+    background-color: red;
+    color: white; /* Text color */
+    text-shadow: 
+        -1px -1px 0 #000,  /* Top left shadow */
+        1px -1px 0 #000,   /* Top right shadow */
+        -1px 1px 0 #000,   /* Bottom left shadow */
+        1px 1px 0 #000;    /* Bottom right shadow */
+    width: 100%;
+}
+
+.sick {
+    background-color: darkblue;
+    color: white; /* Text color */
+    text-shadow: 
+        -1px -1px 0 #000,  /* Top left shadow */
+        1px -1px 0 #000,   /* Top right shadow */
+        -1px 1px 0 #000,   /* Bottom left shadow */
+        1px 1px 0 #000;    /* Bottom right shadow */
+    width: 100%;
+}
+
+.leave {
+    background-color: rgb(119, 171, 235);
+    color: white; /* Text color */
+    text-shadow: 
+        -1px -1px 0 #000,  /* Top left shadow */
+        1px -1px 0 #000,   /* Top right shadow */
+        -1px 1px 0 #000,   /* Bottom left shadow */
+        1px 1px 0 #000;    /* Bottom right shadow */
+    width: 100%;
+}
+
+.holiday {
+    background-color: rgb(0, 255, 208);
+    color: white; /* Text color */
+    text-shadow: 
+        -1px -1px 0 #000,  /* Top left shadow */
+        1px -1px 0 #000,   /* Top right shadow */
+        -1px 1px 0 #000,   /* Bottom left shadow */
+        1px 1px 0 #000;    /* Bottom right shadow */
+    width: 100%;
+}
+
+.out-of-office {
+    background-color: yellow;
+    color: white; /* Text color */
+    text-shadow: 
+        -1px -1px 0 #000,  /* Top left shadow */
+        1px -1px 0 #000,   /* Top right shadow */
+        -1px 1px 0 #000,   /* Bottom left shadow */
+        1px 1px 0 #000;    /* Bottom right shadow */
+    width: 100%;
+}
+
+.visit-to-customer {
+    background-color: green;
+    color: white; /* Text color */
+    text-shadow: 
+        -1px -1px 0 #000,  /* Top left shadow */
+        1px -1px 0 #000,   /* Top right shadow */
+        -1px 1px 0 #000,   /* Bottom left shadow */
+        1px 1px 0 #000;    /* Bottom right shadow */
+    width: 100%;
+}
+
+.customer-visit {
+    background-color: orange;
+    color: white; /* Text color */
+    text-shadow: 
+        -1px -1px 0 #000,  /* Top left shadow */
+        1px -1px 0 #000,   /* Top right shadow */
+        -1px 1px 0 #000,   /* Bottom left shadow */
+        1px 1px 0 #000;    /* Bottom right shadow */
+    width: 100%;
+}
+
+/* Styles for Transfer Admin Modal */
+#transfer-admin-modal .modal-content {
+    width: 60%;
+}
+
+#transfer-admin-modal #select-admin-employee {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+}
+
+#save-transfer-admin {
+    background-color: #136893;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+#save-transfer-admin:hover {
+    background-color: #0b4c6a;
+}
+
+#department-select {
+    padding: 8px 12px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1.5px solid #000000;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+#department-select:hover {
+    background-color: #e0e0e0;
+    color: #000000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#department-select:active {
+    background-color: #136893;
+    color: #ffffff;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(2px);
+}
+
+/* Scrollbar styling */
+body::-webkit-scrollbar {
+    width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .calendar-header,
+    .control-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .calendar-header button,
+    .control-bar button,
+    #department-select,
+    #employee-search, /* Make search input responsive */
+    #search-btn { /* Make search button responsive */
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .calendar-header .week-display {
+        font-size: 14px;
+    }
+
+    .employee-name {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .weekday-header, .calendar-weekdays div {
+        font-size: 12px;
+    }
+}

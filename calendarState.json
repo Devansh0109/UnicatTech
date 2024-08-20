@@ -1,0 +1,34 @@
+{
+  "events": [
+
+  ],
+  "departments": {
+    "SALES": [
+      {
+        "name": "Charlotte",
+        "email": "charlotte@gmail.com"
+      },
+      {
+        "name": "devansh",
+        "email": "devansh0109@gmail.com"
+      },
+      {
+        "name": "mark",
+        "email": "mark@gmail.com"
+      }
+    ],
+    "ACCOUNTS": [
+      {
+        "name": "taru",
+        "email": "singhaaltaru@gmail.com"
+      },
+      {
+        "name": "matt",
+        "email": "matt@gmail.com"
+      }
+    ]
+  },
+  "admin": {
+    "email": "devansh0109@gmail.com"
+  }
+}
